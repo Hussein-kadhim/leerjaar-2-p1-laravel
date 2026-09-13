@@ -5,48 +5,40 @@
         </x-slot>
     @endif
 
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            LeveringsInformatie
-        </h2>
-    </x-slot>
-
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white p-6 rounded shadow">
+            <div class="bg-white p-6">
 
-                <h3 class="text-lg font-bold mb-4">LeveringsInformatie</h3>
+                <h1 class="text-2xl font-medium underline mb-6 decoration-1 underline-offset-4">
+                    LeveringsInformatie
+                </h1>
 
                 @if ($heeftVoorraad)
-                    {{-- Leverancier gegevens boven de tabel --}}
-                    <div class="mb-4 space-y-1 text-sm">
-                        <p><strong>Naam Leverancier:</strong> {{ $leverancier->LeverancierNaam ?? '' }}</p>
-                        <p><strong>Contactpersoon leverancier:</strong> {{ $leverancier->ContactPersoon ?? '' }}</p>
-                        <p><strong>Leverancier nummer:</strong> {{ $leverancier->LeverancierNummer ?? '' }}</p>
-                        <p><strong>Mobiel:</strong> {{ $leverancier->Mobiel ?? '' }}</p>
+                    <div class="mb-6 space-y-1 text-base text-gray-900">
+                        <p>Naam Leverancier: {{ $leverancier->LeverancierNaam ?? '' }}</p>
+                        <p>Contactpersoon leverancier: {{ $leverancier->ContactPersoon ?? '' }}</p>
+                        <p>Leverancier nummer: {{ $leverancier->LeverancierNummer ?? '' }}</p>
+                        <p>Mobiel: {{ $leverancier->Mobiel ?? '' }}</p>
                     </div>
 
-                    {{-- Tabel met leveringen --}}
-                    <table class="w-full border-collapse border border-gray-300 text-left">
+                    <table class="w-full border-collapse border border-black text-left text-base">
                         <thead>
-                            <tr class="bg-gray-100">
-                                <th class="border border-gray-300 p-2">Naam Product</th>
-                                <th class="border border-gray-300 p-2">Datum laatste levering</th>
-                                <th class="border border-gray-300 p-2">Aantal</th>
-                                <th class="border border-gray-300 p-2">Eerstvolgende levering</th>
+                            <tr>
+                                <th class="border border-black p-2 font-normal">Naam Product</th>
+                                <th class="border border-black p-2 font-normal">Datum laatste levering</th>
+                                <th class="border border-black p-2 font-normal">Aantal</th>
+                                <th class="border border-black p-2 font-normal">Eerstvolgende levering</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($leveringen as $levering)
-                                <tr class="hover:bg-gray-50">
-                                    <td class="border border-gray-300 p-2">{{ $product->Naam }}</td>
-                                    <td class="border border-gray-300 p-2">{{ date('d-m-Y', strtotime($levering->DatumLevering)) }}</td>
-                                    <td class="border border-gray-300 p-2">{{ $levering->Aantal }}</td>
-                                    <td class="border border-gray-300 p-2">
+                                <tr>
+                                    <td class="border border-black p-2">{{ $product->Naam }}</td>
+                                    <td class="border border-black p-2">{{ date('d-m-Y', strtotime($levering->DatumLevering)) }}</td>
+                                    <td class="border border-black p-2">{{ $levering->Aantal }}</td>
+                                    <td class="border border-black p-2">
                                         @if ($levering->DatumEerstVolgendeLevering)
                                             {{ date('d-m-Y', strtotime($levering->DatumEerstVolgendeLevering)) }}
-                                        @else
-                                            -
                                         @endif
                                     </td>
                                 </tr>
@@ -55,20 +47,15 @@
                     </table>
 
                 @else
-                    {{-- Geen voorraad melding --}}
-                    <table class="w-full border-collapse border border-gray-300 text-center mb-4">
+                    <table class="w-full border-collapse border border-black text-center text-base mb-4">
                         <tbody>
                             <tr>
-                                <td class="border border-gray-300 p-6 text-red-600 font-semibold">
+                                <td class="border border-black p-6">
                                     {{ $geenVoorraadMelding }}
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-
-                    <p class="text-sm text-gray-500 text-center">
-                        Je wordt binnen 4 seconden doorgestuurd naar het overzicht...
-                    </p>
 
                     <script>
                         setTimeout(function() {
