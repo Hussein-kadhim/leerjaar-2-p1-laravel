@@ -3,8 +3,8 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white p-6">
 
-                <h1 class="text-2xl font-medium underline mb-6 decoration-1 underline-offset-4">
-                    Overzicht Magazijn Jamin
+                <h1 class="text-2xl font-normal mb-6">
+                    <u>Overzicht Magazijn Jamin</u>
                 </h1>
 
                 <table class="w-full border-collapse border border-black text-left text-base">

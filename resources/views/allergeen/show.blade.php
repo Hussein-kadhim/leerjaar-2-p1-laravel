@@ -9,8 +9,8 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white p-6">
 
-                <h1 class="text-2xl font-medium underline mb-6 decoration-1 underline-offset-4">
-                    Overzicht Allergenen
+                <h1 class="text-2xl font-normal mb-6">
+                    <u>Overzicht Allergenen</u>
                 </h1>
 
                 <div class="mb-6 space-y-1 text-base text-gray-900">
