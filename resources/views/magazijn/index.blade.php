@@ -36,13 +36,13 @@
                                     @endif
                                 </td>
                                 <td class="border border-gray-300 p-2 text-center">
-                                    <a href="{{ route('allergeen.show', $product->Id) }}" class="text-red-600 font-bold text-xl no-underline hover:opacity-75">
-                                        ❌
+                                    <a href="{{ route('allergeen.show', $product->Id) }}" class="text-red-600 font-bold text-xl no-underline hover:underline">
+                                        X
                                     </a>
                                 </td>
                                 <td class="border border-gray-300 p-2 text-center">
-                                    <a href="{{ route('levering.show', $product->Id) }}" class="text-blue-600 font-bold text-xl no-underline hover:opacity-75">
-                                        ❓
+                                    <a href="{{ route('levering.show', $product->Id) }}" class="text-blue-600 font-bold text-xl no-underline hover:underline">
+                                        ?
                                     </a>
                                 </td>
                             </tr>
