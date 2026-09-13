@@ -1,129 +1,79 @@
 <x-app-layout>
     @if (!$heeftVoorraad)
-        {{-- Scenario 02: Na 4 seconden automatische redirect naar het overzicht --}}
         <x-slot name="head">
             <meta http-equiv="refresh" content="4; url={{ route('magazijn.index') }}">
         </x-slot>
     @endif
 
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
-                {{ __('LeveringsInformatie') }}
-            </h2>
-            <a href="{{ route('magazijn.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-medium rounded-md transition">
-                &larr; Terug naar Overzicht
-            </a>
-        </div>
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            LeveringsInformatie
+        </h2>
     </x-slot>
 
-    <div class="py-8">
+    <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+            <div class="bg-white p-6 rounded shadow">
+
+                <h3 class="text-lg font-bold mb-4">LeveringsInformatie</h3>
 
                 @if ($heeftVoorraad)
-                    {{-- Scenario 01: Voorraad aanwezig, toon leveranciergegevens en leveringstabel --}}
-                    
-                    {{-- Leveranciergegevens boven de tabel conform Wireframe 2 --}}
-                    <div class="mb-6 bg-gray-50 p-4 rounded-lg border border-gray-200">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-base text-gray-800">
-                            <div>
-                                <span class="font-bold">Naam Leverancier:</span> 
-                                <span>{{ $leverancier?->LeverancierNaam ?? 'Onbekend' }}</span>
-                            </div>
-                            <div>
-                                <span class="font-bold">Contactpersoon leverancier:</span> 
-                                <span>{{ $leverancier?->ContactPersoon ?? 'Onbekend' }}</span>
-                            </div>
-                            <div>
-                                <span class="font-bold">Leverancier nummer:</span> 
-                                <span>{{ $leverancier?->LeverancierNummer ?? 'Onbekend' }}</span>
-                            </div>
-                            <div>
-                                <span class="font-bold">Mobiel:</span> 
-                                <span>{{ $leverancier?->Mobiel ?? 'Onbekend' }}</span>
-                            </div>
-                        </div>
+                    {{-- Leverancier gegevens boven de tabel --}}
+                    <div class="mb-4 space-y-1 text-sm">
+                        <p><strong>Naam Leverancier:</strong> {{ $leverancier->LeverancierNaam ?? '' }}</p>
+                        <p><strong>Contactpersoon leverancier:</strong> {{ $leverancier->ContactPersoon ?? '' }}</p>
+                        <p><strong>Leverancier nummer:</strong> {{ $leverancier->LeverancierNummer ?? '' }}</p>
+                        <p><strong>Mobiel:</strong> {{ $leverancier->Mobiel ?? '' }}</p>
                     </div>
 
-                    {{-- Tabel leveringen gesorteerd op Datum laatste levering (DatumLevering) ASC --}}
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-300 border border-gray-200 text-left text-sm">
-                            <thead class="bg-gray-100">
-                                <tr>
-                                    <th scope="col" class="py-3 px-4 font-semibold text-gray-900 border-b">Naam Product</th>
-                                    <th scope="col" class="py-3 px-4 font-semibold text-gray-900 border-b">Datum laatste levering</th>
-                                    <th scope="col" class="py-3 px-4 font-semibold text-gray-900 border-b">Aantal</th>
-                                    <th scope="col" class="py-3 px-4 font-semibold text-gray-900 border-b">Eerstvolgende levering</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-200 bg-white">
-                                @forelse ($leveringen as $levering)
-                                    <tr class="hover:bg-gray-50">
-                                        <td class="py-3 px-4 font-medium text-gray-900 border-r border-gray-100">
-                                            {{ $product->Naam }}
-                                        </td>
-                                        <td class="py-3 px-4 text-gray-700 border-r border-gray-100">
-                                            {{ date('d-m-Y', strtotime($levering->DatumLevering)) }}
-                                        </td>
-                                        <td class="py-3 px-4 text-gray-700 border-r border-gray-100">
-                                            {{ $levering->Aantal }}
-                                        </td>
-                                        <td class="py-3 px-4 text-gray-700">
-                                            @if ($levering->DatumEerstVolgendeLevering)
-                                                {{ date('d-m-Y', strtotime($levering->DatumEerstVolgendeLevering)) }}
-                                            @else
-                                                <span class="text-gray-400 italic">Onbekend</span>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="4" class="py-6 text-center text-gray-500">
-                                            Geen leveringsgegevens bekend voor dit product.
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-
-                @else
-                    {{-- Scenario 02: Geen voorraad aanwezig (bijv. Winegums) --}}
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-300 border border-gray-200 text-left text-sm mb-6">
-                            <thead class="bg-gray-100">
-                                <tr>
-                                    <th scope="col" class="py-3 px-4 font-semibold text-gray-900 border-b">
-                                        Status voorraad van: {{ $product->Naam }}
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white">
-                                <tr>
-                                    <td class="py-8 px-6 text-center text-base font-semibold text-red-600 bg-red-50">
-                                        {{ $geenVoorraadMelding }}
+                    {{-- Tabel met leveringen --}}
+                    <table class="w-full border-collapse border border-gray-300 text-left">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="border border-gray-300 p-2">Naam Product</th>
+                                <th class="border border-gray-300 p-2">Datum laatste levering</th>
+                                <th class="border border-gray-300 p-2">Aantal</th>
+                                <th class="border border-gray-300 p-2">Eerstvolgende levering</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($leveringen as $levering)
+                                <tr class="hover:bg-gray-50">
+                                    <td class="border border-gray-300 p-2">{{ $product->Naam }}</td>
+                                    <td class="border border-gray-300 p-2">{{ date('d-m-Y', strtotime($levering->DatumLevering)) }}</td>
+                                    <td class="border border-gray-300 p-2">{{ $levering->Aantal }}</td>
+                                    <td class="border border-gray-300 p-2">
+                                        @if ($levering->DatumEerstVolgendeLevering)
+                                            {{ date('d-m-Y', strtotime($levering->DatumEerstVolgendeLevering)) }}
+                                        @else
+                                            -
+                                        @endif
                                     </td>
                                 </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                            @endforeach
+                        </tbody>
+                    </table>
 
-                    <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-yellow-800 text-center text-sm">
-                        U wordt over <span id="countdown" class="font-bold text-base">4</span> seconden automatisch doorverwezen naar de pagina Overzicht Magazijn Jamin...
-                    </div>
+                @else
+                    {{-- Geen voorraad melding --}}
+                    <table class="w-full border-collapse border border-gray-300 text-center mb-4">
+                        <tbody>
+                            <tr>
+                                <td class="border border-gray-300 p-6 text-red-600 font-semibold">
+                                    {{ $geenVoorraadMelding }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p class="text-sm text-gray-500 text-center">
+                        Je wordt binnen 4 seconden doorgestuurd naar het overzicht...
+                    </p>
 
                     <script>
-                        let seconds = 4;
-                        const countdownEl = document.getElementById('countdown');
-                        const interval = setInterval(() => {
-                            seconds--;
-                            if (countdownEl) countdownEl.innerText = seconds;
-                            if (seconds <= 0) {
-                                clearInterval(interval);
-                                window.location.href = "{{ route('magazijn.index') }}";
-                            }
-                        }, 1000);
+                        setTimeout(function() {
+                            window.location.href = "{{ route('magazijn.index') }}";
+                        }, 4000);
                     </script>
                 @endif
 

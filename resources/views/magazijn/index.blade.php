@@ -1,75 +1,54 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
-            {{ __('Overzicht Magazijn Jamin') }}
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            Overzicht Magazijn Jamin
         </h2>
     </x-slot>
 
-    <div class="py-8">
+    <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                
-                <div class="mb-4 flex justify-between items-center">
-                    <h3 class="text-xl font-bold text-gray-700">Voorraad & Producten</h3>
-                    <span class="text-sm text-gray-500">Gesorteerd op Barcode (oplopend)</span>
-                </div>
+            <div class="bg-white p-6 rounded shadow">
 
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-300 border border-gray-200 text-left text-sm">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th scope="col" class="py-3.5 px-4 font-semibold text-gray-900 border-b">Barcode</th>
-                                <th scope="col" class="py-3.5 px-4 font-semibold text-gray-900 border-b">Naam</th>
-                                <th scope="col" class="py-3.5 px-4 font-semibold text-gray-900 border-b">Verpakkingseenheid</th>
-                                <th scope="col" class="py-3.5 px-4 font-semibold text-gray-900 border-b">Aantal aanwezig</th>
-                                <th scope="col" class="py-3.5 px-4 font-semibold text-gray-900 text-center border-b">Allergenen Info</th>
-                                <th scope="col" class="py-3.5 px-4 font-semibold text-gray-900 text-center border-b">Leverantie Info</th>
+                <h3 class="text-lg font-bold mb-4">Overzicht Magazijn Jamin</h3>
+
+                <table class="w-full border-collapse border border-gray-300 text-left">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="border border-gray-300 p-2">Barcode</th>
+                            <th class="border border-gray-300 p-2">Naam</th>
+                            <th class="border border-gray-300 p-2">Verpakkingseenheid</th>
+                            <th class="border border-gray-300 p-2">Aantal aanwezig</th>
+                            <th class="border border-gray-300 p-2 text-center">Allergenen Info</th>
+                            <th class="border border-gray-300 p-2 text-center">Leverantie Info</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($producten as $product)
+                            <tr class="hover:bg-gray-50">
+                                <td class="border border-gray-300 p-2">{{ $product->Barcode }}</td>
+                                <td class="border border-gray-300 p-2">{{ $product->Naam }}</td>
+                                <td class="border border-gray-300 p-2">{{ str_replace('.', ',', (string)$product->VerpakkingsEenheid) }} kg</td>
+                                <td class="border border-gray-300 p-2">
+                                    @if ($product->AantalAanwezig === null || $product->AantalAanwezig === 0)
+                                        <span class="text-red-600 font-bold">Geen voorraad</span>
+                                    @else
+                                        {{ $product->AantalAanwezig }}
+                                    @endif
+                                </td>
+                                <td class="border border-gray-300 p-2 text-center">
+                                    <a href="{{ route('allergeen.show', $product->Id) }}" class="text-red-600 font-bold text-xl no-underline hover:opacity-75">
+                                        ❌
+                                    </a>
+                                </td>
+                                <td class="border border-gray-300 p-2 text-center">
+                                    <a href="{{ route('levering.show', $product->Id) }}" class="text-blue-600 font-bold text-xl no-underline hover:opacity-75">
+                                        ❓
+                                    </a>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200 bg-white">
-                            @forelse ($producten as $product)
-                                <tr class="hover:bg-gray-50 transition">
-                                    <td class="py-3 px-4 font-mono text-gray-800 border-r border-gray-100">
-                                        {{ $product->Barcode }}
-                                    </td>
-                                    <td class="py-3 px-4 font-medium text-gray-900 border-r border-gray-100">
-                                        {{ $product->Naam }}
-                                    </td>
-                                    <td class="py-3 px-4 text-gray-700 border-r border-gray-100">
-                                        {{ str_replace('.', ',', (string)$product->VerpakkingsEenheid) }} kg
-                                    </td>
-                                    <td class="py-3 px-4 text-gray-700 border-r border-gray-100">
-                                        @if (is_null($product->AantalAanwezig) || $product->AantalAanwezig === 0)
-                                            <span class="text-red-600 font-semibold">Geen voorraad</span>
-                                        @else
-                                            {{ $product->AantalAanwezig }}
-                                        @endif
-                                    </td>
-                                    <td class="py-3 px-4 text-center border-r border-gray-100">
-                                        <a href="{{ route('allergeen.show', $product->Id) }}" 
-                                           class="inline-flex items-center justify-center w-8 h-8 rounded-full hover:bg-red-50 text-red-600 font-extrabold text-lg transition duration-150"
-                                           title="Bekijk allergeneninformatie van {{ $product->Naam }}">
-                                            ❌
-                                        </a>
-                                    </td>
-                                    <td class="py-3 px-4 text-center">
-                                        <a href="{{ route('levering.show', $product->Id) }}" 
-                                           class="inline-flex items-center justify-center w-8 h-8 rounded-full hover:bg-blue-50 text-blue-600 font-extrabold text-xl transition duration-150"
-                                           title="Bekijk leveringsinformatie van {{ $product->Naam }}">
-                                            ❓
-                                        </a>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="6" class="py-6 text-center text-gray-500">
-                                        Geen producten gevonden in het magazijn.
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
+                        @endforeach
+                    </tbody>
+                </table>
 
             </div>
         </div>
