@@ -24,14 +24,14 @@
                                 <td class="border border-black p-2">{{ $product->Barcode }}</td>
                                 <td class="border border-black p-2">{{ $product->Naam }}</td>
                                 <td class="border border-black p-2">{{ str_replace('.', ',', (string)$product->VerpakkingsEenheid) }}</td>
-                                <td class="border border-black p-2">{{ $product->AantalAanwezig }}</td>
+                                <td class="border border-black p-2">{{ ($product->AantalAanwezig !== null && $product->AantalAanwezig > 0) ? $product->AantalAanwezig : 'Niet op voorraad' }}</td>
                                 <td class="border border-black p-2 text-center">
-                                    <a href="{{ route('allergeen.show', $product->Id) }}" class="text-red-600 font-bold text-xl no-underline">
+                                    <a href="{{ route('allergeen.show', $product->Id) }}" class="font-bold text-xl no-underline" style="color: #dc2626;">
                                         X
                                     </a>
                                 </td>
                                 <td class="border border-black p-2 text-center">
-                                    <a href="{{ route('levering.show', $product->Id) }}" class="text-blue-600 font-bold text-xl no-underline">
+                                    <a href="{{ route('levering.show', $product->Id) }}" class="font-bold text-xl no-underline" style="color: #2563eb;">
                                         ?
                                     </a>
                                 </td>
