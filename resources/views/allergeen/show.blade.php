@@ -13,6 +13,7 @@
                     <u>Overzicht Allergenen</u>
                 </h1>
 
+                <!-- product details -->
                 <div class="mb-6 space-y-1 text-base text-gray-900">
                     <p>Naam: {{ $product->Naam }}</p>
                     <p>Barcode: {{ $product->Barcode }}</p>
