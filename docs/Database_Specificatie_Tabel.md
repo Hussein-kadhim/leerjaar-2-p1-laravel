@@ -115,3 +115,6 @@ Beschrijving: Registreert leveringen van producten door leveranciers inclusief v
 **Foreign Keys:**
 - `FK_ProductPerLeverancier_LeverancierId`: `LeverancierId` verwijst naar `Leverancier(Id)` met `ON DELETE CASCADE ON UPDATE CASCADE`.
 - `FK_ProductPerLeverancier_ProductId`: `ProductId` verwijst naar `Product(Id)` met `ON DELETE CASCADE ON UPDATE CASCADE`.
+
+---
+*Status: Alle 6 tabellen en relaties gecontroleerd en werkend.*
