@@ -57,3 +57,8 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 # leerjaar-2-p1-laravel
+
+## Starten van project
+1. `php artisan migrate:fresh --seed`
+2. `php artisan serve`
+3. Ga naar `http://localhost:8000/magazijn`
