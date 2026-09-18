@@ -13,14 +13,16 @@
                     <u>LeveringsInformatie</u>
                 </h1>
 
-                @if ($heeftVoorraad)
+                @if ($leverancier)
                     <div class="mb-6 space-y-1 text-base text-gray-900">
                         <p>Naam Leverancier: {{ $leverancier->LeverancierNaam ?? '' }}</p>
                         <p>Contactpersoon leverancier: {{ $leverancier->ContactPersoon ?? '' }}</p>
                         <p>Leverancier nummer: {{ $leverancier->LeverancierNummer ?? '' }}</p>
                         <p>Mobiel: {{ $leverancier->Mobiel ?? '' }}</p>
                     </div>
+                @endif
 
+                @if ($heeftVoorraad)
                     <table class="w-full border-collapse border border-black text-left text-base">
                         <thead>
                             <tr>
