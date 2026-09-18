@@ -21,6 +21,7 @@ class MagazijnJaminTest extends TestCase
         $response->assertSee('Overzicht Magazijn Jamin');
         $response->assertSee('Mintnopjes');
         $response->assertSee('Winegums');
+        $response->assertSee('Niet op voorraad');
         $response->assertSee('Zoute Ruitjes');
     }
 
