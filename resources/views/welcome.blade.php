@@ -21,6 +21,13 @@
         <header class="w-full lg:max-w-4xl max-w-[335px] text-sm mb-6 not-has-[nav]:hidden">
             @if (Route::has('login'))
                 <nav class="flex items-center justify-end gap-4">
+                    <a
+                        href="{{ route('magazijn.index') }}"
+                        class="inline-block px-5 py-1.5 font-medium text-red-600 border border-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-sm text-sm leading-normal"
+                    >
+                        Overzicht Magazijn Jamin
+                    </a>
+
                     @auth
                         <a
                             href="{{ url('/dashboard') }}"
