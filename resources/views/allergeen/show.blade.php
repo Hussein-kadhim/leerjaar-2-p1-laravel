@@ -19,35 +19,32 @@
                     <p>Barcode: {{ $product->Barcode }}</p>
                 </div>
 
-                @if ($heeftAllergenen)
-                    <table class="w-full border-collapse border border-black text-left text-base">
-                        <thead>
+                <table class="w-full border-collapse border border-black text-left text-base mb-6">
+                    <thead>
+                        <tr>
+                            <th class="border border-black p-2 font-normal w-1/4">Naam</th>
+                            <th class="border border-black p-2 font-normal w-3/4">Omschrijving</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($allergenen as $allergeen)
                             <tr>
-                                <th class="border border-black p-2 font-normal w-1/4">Naam</th>
-                                <th class="border border-black p-2 font-normal w-3/4">Omschrijving</th>
+                                <td class="border border-black p-2">{{ $allergeen->Naam }}</td>
+                                <td class="border border-black p-2">{{ $allergeen->Omschrijving }}</td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($allergenen as $allergeen)
-                                <tr>
-                                    <td class="border border-black p-2">{{ $allergeen->Naam }}</td>
-                                    <td class="border border-black p-2">{{ $allergeen->Omschrijving }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                        @endforeach
 
-                @else
-                    <table class="w-full border-collapse border border-black text-center text-base mb-4">
-                        <tbody>
+                        @if (!$heeftAllergenen)
                             <tr>
-                                <td class="border border-black p-6">
+                                <td colspan="2" class="border border-black p-6 text-center">
                                     {{ $geenAllergenenMelding }}
                                 </td>
                             </tr>
-                        </tbody>
-                    </table>
+                        @endif
+                    </tbody>
+                </table>
 
+                @if (!$heeftAllergenen)
                     <script>
                         setTimeout(function() {
                             window.location.href = "{{ route('magazijn.index') }}";

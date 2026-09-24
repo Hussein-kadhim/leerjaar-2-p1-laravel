@@ -22,17 +22,17 @@
                     </div>
                 @endif
 
-                @if ($heeftVoorraad)
-                    <table class="w-full border-collapse border border-black text-left text-base">
-                        <thead>
-                            <tr>
-                                <th class="border border-black p-2 font-normal">Naam Product</th>
-                                <th class="border border-black p-2 font-normal">Datum laatste levering</th>
-                                <th class="border border-black p-2 font-normal">Aantal</th>
-                                <th class="border border-black p-2 font-normal">Eerstvolgende levering</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                <table class="w-full border-collapse border border-black text-left text-base mb-6">
+                    <thead>
+                        <tr>
+                            <th class="border border-black p-2 font-normal">Naam Product</th>
+                            <th class="border border-black p-2 font-normal">Datum laatste levering</th>
+                            <th class="border border-black p-2 font-normal">Aantal</th>
+                            <th class="border border-black p-2 font-normal">Eerstvolgende levering</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if ($heeftVoorraad)
                             @foreach ($leveringen as $levering)
                                 <tr>
                                     <td class="border border-black p-2">{{ $product->Naam }}</td>
@@ -45,20 +45,17 @@
                                     </td>
                                 </tr>
                             @endforeach
-                        </tbody>
-                    </table>
-
-                @else
-                    <table class="w-full border-collapse border border-black text-center text-base mb-4">
-                        <tbody>
+                        @else
                             <tr>
-                                <td class="border border-black p-6">
+                                <td colspan="4" class="border border-black p-6 text-center">
                                     {{ $geenVoorraadMelding }}
                                 </td>
                             </tr>
-                        </tbody>
-                    </table>
+                        @endif
+                    </tbody>
+                </table>
 
+                @if (!$heeftVoorraad)
                     <script>
                         setTimeout(function() {
                             window.location.href = "{{ route('magazijn.index') }}";
