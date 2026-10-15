@@ -42,6 +42,7 @@ Route::middleware('auth')->group(function () {
 
     // BE-Opdracht 02 - User Story 2: Detailscherm Levering Product (Wireframe 4)
     Route::get('/levering/{leverancierId}/{productId}/create', [LeveringController::class, 'create'])->name('levering.create');
+    Route::post('/levering/{leverancierId}/{productId}', [LeveringController::class, 'store'])->name('levering.store');
 });
 
 require __DIR__.'/auth.php';
