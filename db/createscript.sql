@@ -182,7 +182,7 @@ VALUES (1, 'Mintnopjes', '8719587231278', 1, NULL, NOW(6), NOW(6))
       ,(7, 'Witte Muizen', '8719587328256', 1, NULL, NOW(6), NOW(6))
       ,(8, 'Reuzen Slangen', '8719587325641', 1, NULL, NOW(6), NOW(6))
       ,(9, 'Zoute Rijen', '8719587322739', 1, NULL, NOW(6), NOW(6))
-      ,(10, 'Winegums', '8719587327527', 1, NULL, NOW(6), NOW(6))
+      ,(10, 'Winegums', '8719587327527', 0, NULL, NOW(6), NOW(6))
       ,(11, 'Drop Munten', '8719587322345', 1, NULL, NOW(6), NOW(6))
       ,(12, 'Kruis Drop', '8719587322265', 1, NULL, NOW(6), NOW(6))
       ,(13, 'Zoute Ruitjes', '8719587323256', 1, NULL, NOW(6), NOW(6));
@@ -212,7 +212,8 @@ VALUES (1, 'Venco', 'Bert van Linge', 'L1029384719', '06-28493827', 1, NULL, NOW
       ,(2, 'Astra Sweets', 'Jasper del Monte', 'L1029284315', '06-39398734', 1, NULL, NOW(6), NOW(6))
       ,(3, 'Haribo', 'Sven Stalman', 'L1029324748', '06-24383291', 1, NULL, NOW(6), NOW(6))
       ,(4, 'Basset', 'Joyce Stelterberg', 'L1023845773', '06-48293823', 1, NULL, NOW(6), NOW(6))
-      ,(5, 'De Bron', 'Remco Veenstra', 'L1023857736', '06-34291234', 1, NULL, NOW(6), NOW(6));
+      ,(5, 'De Bron', 'Remco Veenstra', 'L1023857736', '06-34291234', 1, NULL, NOW(6), NOW(6))
+      ,(6, 'Quality Street', 'Johan Nooij', 'L1029234586', '06-23458456', 1, NULL, NOW(6), NOW(6));
 
 
 -- Step : 04.3
@@ -344,3 +345,143 @@ VALUES (1, 1, 1, '2024-10-09', 23, '2024-10-16', 1, NULL, NOW(6), NOW(6))
       ,(15, 5, 11, '2024-10-19', 60, '2024-10-26', 1, NULL, NOW(6), NOW(6))
       ,(16, 5, 12, '2024-10-11', 45, NULL, 1, NULL, NOW(6), NOW(6))
       ,(17, 5, 13, '2024-10-12', 23, NULL, 1, NULL, NOW(6), NOW(6));
+
+
+-- ==============================================================================
+-- DEEL 4: STORED PROCEDURES (Voor Opdracht 2)
+-- ==============================================================================
+
+-- Step : 05.1
+/*********************************************************************************
+-- Doel : Haal overzicht op van leveranciers met aantal verschillende producten
+-- Gesorteerd op AantalVerschillendeProducten DESC
+**********************************************************************************/ 
+DROP PROCEDURE IF EXISTS spGetLeveranciersOverzicht;
+DELIMITER //
+CREATE PROCEDURE spGetLeveranciersOverzicht()
+BEGIN
+    SELECT 
+         l.Id
+        ,l.Naam
+        ,l.ContactPersoon
+        ,l.LeverancierNummer
+        ,l.Mobiel
+        ,COUNT(DISTINCT ppl.ProductId) AS AantalVerschillendeProducten
+    FROM Leverancier l
+    LEFT JOIN ProductPerLeverancier ppl ON l.Id = ppl.LeverancierId
+    GROUP BY l.Id, l.Naam, l.ContactPersoon, l.LeverancierNummer, l.Mobiel
+    ORDER BY AantalVerschillendeProducten DESC;
+END //
+DELIMITER ;
+
+
+-- Step : 05.2
+/*********************************************************************************
+-- Doel : Haal gegevens van één leverancier op
+**********************************************************************************/ 
+DROP PROCEDURE IF EXISTS spGetLeverancierById;
+DELIMITER //
+CREATE PROCEDURE spGetLeverancierById(IN p_LeverancierId INT)
+BEGIN
+    SELECT 
+         Id
+        ,Naam
+        ,ContactPersoon
+        ,LeverancierNummer
+        ,Mobiel
+    FROM Leverancier
+    WHERE Id = p_LeverancierId;
+END //
+DELIMITER ;
+
+
+-- Step : 05.3
+/*********************************************************************************
+-- Doel : Haal alle geleverde verschillende producten op voor een leverancier
+-- Gesorteerd op Aantal in Magazijn DESC
+**********************************************************************************/ 
+DROP PROCEDURE IF EXISTS spGetGeleverdeProductenByLeverancierId;
+DELIMITER //
+CREATE PROCEDURE spGetGeleverdeProductenByLeverancierId(IN p_LeverancierId INT)
+BEGIN
+    SELECT 
+         p.Id AS ProductId
+        ,p.Naam AS ProductNaam
+        ,p.IsActief AS ProductIsActief
+        ,m.AantalAanwezig
+        ,m.VerpakkingsEenheid
+        ,MAX(ppl.DatumLevering) AS LaatsteLevering
+    FROM ProductPerLeverancier ppl
+    INNER JOIN Product p ON ppl.ProductId = p.Id
+    LEFT JOIN Magazijn m ON p.Id = m.ProductId
+    WHERE ppl.LeverancierId = p_LeverancierId
+    GROUP BY p.Id, p.Naam, p.IsActief, m.AantalAanwezig, m.VerpakkingsEenheid
+    ORDER BY m.AantalAanwezig DESC;
+END //
+DELIMITER ;
+
+
+-- Step : 05.4
+/*********************************************************************************
+-- Doel : Haal product- en leveranciersdetails op voor scherm Levering product
+**********************************************************************************/ 
+DROP PROCEDURE IF EXISTS spGetProductLeveringDetails;
+DELIMITER //
+CREATE PROCEDURE spGetProductLeveringDetails(IN p_LeverancierId INT, IN p_ProductId INT)
+BEGIN
+    SELECT 
+         p.Id AS ProductId
+        ,p.Naam AS ProductNaam
+        ,p.IsActief AS ProductIsActief
+        ,l.Id AS LeverancierId
+        ,l.Naam AS LeverancierNaam
+        ,l.ContactPersoon
+        ,l.Mobiel
+    FROM Product p
+    CROSS JOIN Leverancier l
+    WHERE p.Id = p_ProductId AND l.Id = p_LeverancierId;
+END //
+DELIMITER ;
+
+
+-- Step : 05.5
+/*********************************************************************************
+-- Doel : Voeg een nieuwe levering toe en update de voorraad in Magazijn
+**********************************************************************************/ 
+DROP PROCEDURE IF EXISTS spVoegProductLeveringToe;
+DELIMITER //
+CREATE PROCEDURE spVoegProductLeveringToe(
+    IN p_LeverancierId INT,
+    IN p_ProductId INT,
+    IN p_Aantal INT,
+    IN p_DatumEerstVolgendeLevering DATE
+)
+BEGIN
+    -- Voeg een nieuw leveringsrecord toe
+    INSERT INTO ProductPerLeverancier (
+         LeverancierId
+        ,ProductId
+        ,DatumLevering
+        ,Aantal
+        ,DatumEerstVolgendeLevering
+        ,IsActief
+        ,DatumAangemaakt
+        ,DatumGewijzigd
+    ) VALUES (
+         p_LeverancierId
+        ,p_ProductId
+        ,CURDATE()
+        ,p_Aantal
+        ,p_DatumEerstVolgendeLevering
+        ,1
+        ,NOW(6)
+        ,NOW(6)
+    );
+
+    -- Verhoog het aantal in Magazijn
+    UPDATE Magazijn
+    SET AantalAanwezig = COALESCE(AantalAanwezig, 0) + p_Aantal,
+        DatumGewijzigd = NOW(6)
+    WHERE ProductId = p_ProductId;
+END //
+DELIMITER ;
