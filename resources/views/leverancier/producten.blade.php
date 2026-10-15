@@ -7,6 +7,12 @@
                     <u>Geleverde producten</u>
                 </h1>
 
+                @if (session('status'))
+                    <div class="mb-6 p-4 border border-green-500 bg-green-50 text-green-700 text-base rounded">
+                        {{ session('status') }}
+                    </div>
+                @endif
+
                 {{-- Leveranciersgegevens bovenaan volgens Wireframe-02 & Wireframe-03 --}}
                 <div class="mb-6 text-base space-y-1">
                     <div class="grid grid-cols-[160px_1fr] max-w-md">
