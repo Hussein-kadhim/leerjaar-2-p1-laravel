@@ -55,4 +55,23 @@ class LeveringController extends Controller
             'geenVoorraadMelding' => $geenVoorraadMelding
         ]);
     }
+
+    /**
+     * Detailscherm Levering product (Wireframe-04).
+     */
+    public function create($leverancierId, $productId)
+    {
+        $details = DB::select('CALL spGetProductLeveringDetails(?, ?)', [$leverancierId, $productId]);
+        $leveringInfo = !empty($details) ? $details[0] : null;
+
+        if (!$leveringInfo) {
+            return redirect()->route('leverancier.index');
+        }
+
+        return view('levering.create', [
+            'leveringInfo' => $leveringInfo,
+            'leverancierId' => $leverancierId,
+            'productId' => $productId,
+        ]);
+    }
 }
