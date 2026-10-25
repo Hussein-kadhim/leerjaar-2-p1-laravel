@@ -28,6 +28,18 @@
                         >
                             Dashboard
                         </a>
+                        <a
+                            href="{{ route('magazijn.index') }}"
+                            class="inline-block px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-sm text-sm leading-normal"
+                        >
+                            Overzicht Magazijn Jamin
+                        </a>
+                        <a
+                            href="{{ route('leverancier.index') }}"
+                            class="inline-block px-4 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-sm text-sm leading-normal"
+                        >
+                            Overzicht Leveranciers
+                        </a>
                     @else
                         <a
                             href="{{ route('login') }}"
