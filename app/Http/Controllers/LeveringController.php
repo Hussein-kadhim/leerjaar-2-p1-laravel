@@ -114,8 +114,6 @@ class LeveringController extends Controller
             $datumEerstvolgende,
         ]);
 
-        return redirect()
-            ->route('leverancier.producten', $leverancierId)
-            ->with('status', 'Levering succesvol toegevoegd.');
+        return redirect()->route('leverancier.producten', $leverancierId);
     }
 }

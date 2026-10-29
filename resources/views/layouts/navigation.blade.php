@@ -15,10 +15,10 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('magazijn.index')" :active="request()->routeIs('magazijn.*', 'levering.*', 'allergeen.*')">
+                    <x-nav-link :href="route('magazijn.index')" :active="request()->routeIs('magazijn.*', 'levering.show', 'allergeen.*')">
                         {{ __('Overzicht Magazijn Jamin') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('leverancier.index')" :active="request()->routeIs('leverancier.*')">
+                    <x-nav-link :href="route('leverancier.index')" :active="request()->routeIs('leverancier.*', 'levering.create', 'levering.store')">
                         {{ __('Overzicht Leveranciers') }}
                     </x-nav-link>
                 </div>
@@ -76,10 +76,10 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('magazijn.index')" :active="request()->routeIs('magazijn.*', 'levering.*', 'allergeen.*')">
+            <x-responsive-nav-link :href="route('magazijn.index')" :active="request()->routeIs('magazijn.*', 'levering.show', 'allergeen.*')">
                 {{ __('Overzicht Magazijn Jamin') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('leverancier.index')" :active="request()->routeIs('leverancier.*')">
+            <x-responsive-nav-link :href="route('leverancier.index')" :active="request()->routeIs('leverancier.*', 'levering.create', 'levering.store')">
                 {{ __('Overzicht Leveranciers') }}
             </x-responsive-nav-link>
         </div>

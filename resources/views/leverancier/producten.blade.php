@@ -1,36 +1,16 @@
 <x-app-layout>
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white p-6 shadow-sm sm:rounded-lg">
-
-                <h1 class="text-2xl font-normal mb-6">
+            <div class="bg-white p-6 shadow-sm sm:rounded-lg">                <h1 class="text-2xl font-normal mb-6">
                     <u>Geleverde producten</u>
                 </h1>
 
-                @if (session('status'))
-                    <div class="mb-6 p-4 border border-green-500 bg-green-50 text-green-700 text-base rounded">
-                        {{ session('status') }}
-                    </div>
-                @endif
-
                 {{-- Leveranciersgegevens bovenaan volgens Wireframe-02 & Wireframe-03 --}}
                 <div class="mb-6 text-base space-y-1">
-                    <div class="grid grid-cols-[160px_1fr] max-w-md">
-                        <span>Naam leverancier</span>
-                        <span>: {{ $leverancier->Naam }}</span>
-                    </div>
-                    <div class="grid grid-cols-[160px_1fr] max-w-md">
-                        <span>Contactpersoon</span>
-                        <span>: {{ $leverancier->ContactPersoon }}</span>
-                    </div>
-                    <div class="grid grid-cols-[160px_1fr] max-w-md">
-                        <span>Leverancier nr</span>
-                        <span>: {{ $leverancier->LeverancierNummer }}</span>
-                    </div>
-                    <div class="grid grid-cols-[160px_1fr] max-w-md">
-                        <span>Mobiel</span>
-                        <span>: {{ $leverancier->Mobiel }}</span>
-                    </div>
+                    <p><span style="display: inline-block; min-width: 170px;">Naam leverancier:</span> {{ $leverancier->Naam }}</p>
+                    <p><span style="display: inline-block; min-width: 170px;">Contactpersoon:</span> {{ $leverancier->ContactPersoon }}</p>
+                    <p><span style="display: inline-block; min-width: 170px;">Leverancier nr:</span> {{ $leverancier->LeverancierNummer }}</p>
+                    <p><span style="display: inline-block; min-width: 170px;">Mobiel:</span> {{ $leverancier->Mobiel }}</p>
                 </div>
 
                 {{-- Tabel met geleverde producten --}}
@@ -77,27 +57,21 @@
                             </tr>
                         @endif
                     </tbody>
-                </table>
-
-                {{-- Automatische redirect na 3 seconden bij Scenario 02 --}}
+                </table>                {{-- Automatische redirect na 3 seconden bij Scenario 02 --}}
                 @if (!$heeftProducten)
                     <script>
                         setTimeout(function() {
                             window.location.href = "{{ route('leverancier.index') }}";
                         }, 3000);
                     </script>
-                @endif
-
-                <div class="mt-6 flex justify-end space-x-3">
-                    <a href="{{ route('leverancier.index') }}" class="px-6 py-2 border border-black bg-white hover:bg-gray-100 text-black font-normal text-sm">
+                @endif                <div class="mt-6 flex justify-end space-x-3" style="display: flex; flex-direction: row; justify-content: flex-end; gap: 12px; align-items: center;">
+                    <a href="{{ route('leverancier.index') }}" class="px-6 py-2 border border-black bg-white hover:bg-gray-100 text-black font-normal text-sm" style="display: inline-block; white-space: nowrap;">
                         Terug
                     </a>
-                    <a href="{{ route('dashboard') }}" class="px-6 py-2 border border-black bg-white hover:bg-gray-100 text-black font-normal text-sm">
+                    <a href="{{ route('dashboard') }}" class="px-6 py-2 border border-black bg-white hover:bg-gray-100 text-black font-normal text-sm" style="display: inline-block; white-space: nowrap;">
                         Home
                     </a>
-                </div>
-
-            </div>
+                </div>            </div>
         </div>
     </div>
 </x-app-layout>

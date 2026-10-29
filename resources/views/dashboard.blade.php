@@ -15,7 +15,7 @@
                         <a href="{{ route('magazijn.index') }}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded">
                             Overzicht Magazijn Jamin
                         </a>
-                        <a href="{{ route('leverancier.index') }}" class="inline-block bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded">
+                        <a href="{{ route('leverancier.index') }}" class="inline-block text-white font-medium py-2 px-4 rounded" style="background-color: #f97316;">
                             Overzicht Leveranciers
                         </a>
                     </div>

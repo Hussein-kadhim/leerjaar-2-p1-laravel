@@ -47,7 +47,7 @@
                     </tbody>
                 </table>
 
-                <div class="mt-6 flex justify-end">
+                <div class="mt-6 flex justify-end" style="display: flex; justify-content: flex-end;">
                     <a href="{{ route('dashboard') }}" class="px-6 py-2 border border-black bg-white hover:bg-gray-100 text-black font-normal text-sm">
                         Home
                     </a>
