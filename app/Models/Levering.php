@@ -8,3 +8,4 @@ namespace App\Models;
 class Levering extends ProductPerLeverancier
 {
 }
+

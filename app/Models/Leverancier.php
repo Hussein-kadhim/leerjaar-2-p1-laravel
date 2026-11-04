@@ -61,3 +61,4 @@ class Leverancier extends Model
         return DB::select('CALL spGetGeleverdeProductenByLeverancierId(?)', [$leverancierId]);
     }
 }
+
