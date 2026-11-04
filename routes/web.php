@@ -25,22 +25,22 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Overzicht Magazijn Jamin (Wireframe 1)
+    // Overzicht Magazijn Jamin 
     Route::get('/magazijn', [MagazijnController::class, 'index'])->name('magazijn.index');
 
-    // User Story 1: Detailscherm Leveringsinformatie (Wireframe 2)
+    // Detailscherm Leveringsinformatie
     Route::get('/levering/{productId}', [LeveringController::class, 'show'])->name('levering.show');
 
-    // User Story 2: Detailscherm Allergeneninformatie (Wireframe 3)
+    // Detailscherm Allergeneninformatie 
     Route::get('/allergeen/{productId}', [AllergeenController::class, 'show'])->name('allergeen.show');
 
-    // BE-Opdracht 02 - User Story 1: Overzicht Leveranciers (Wireframe 1)
+    // Overzicht Leveranciers
     Route::get('/leverancier', [LeverancierController::class, 'index'])->name('leverancier.index');
 
-    // BE-Opdracht 02 - User Story 1: Detailscherm Geleverde Producten (Wireframe 2 & Wireframe 3)
+    // Detailscherm Geleverde Producten
     Route::get('/leverancier/{leverancierId}/producten', [LeverancierController::class, 'producten'])->name('leverancier.producten');
 
-    // BE-Opdracht 02 - User Story 2: Detailscherm Levering Product (Wireframe 4)
+    // Detailscherm Levering Product
     Route::get('/levering/{leverancierId}/{productId}/create', [LeveringController::class, 'create'])->name('levering.create');
     Route::post('/levering/{leverancierId}/{productId}', [LeveringController::class, 'store'])->name('levering.store');
 });
