@@ -28,3 +28,4 @@ class Allergeen extends Model
         return $this->hasMany(ProductPerAllergeen::class, 'AllergeenId', 'Id');
     }
 }
+

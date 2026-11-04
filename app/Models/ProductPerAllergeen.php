@@ -33,3 +33,4 @@ class ProductPerAllergeen extends Model
         return $this->belongsTo(Allergeen::class, 'AllergeenId', 'Id');
     }
 }
+

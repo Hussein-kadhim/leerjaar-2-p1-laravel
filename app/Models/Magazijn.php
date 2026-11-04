@@ -29,3 +29,4 @@ class Magazijn extends Model
         return $this->belongsTo(Product::class, 'ProductId', 'Id');
     }
 }
+
