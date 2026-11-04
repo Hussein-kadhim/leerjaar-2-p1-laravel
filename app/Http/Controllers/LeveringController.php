@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Levering;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -62,8 +63,8 @@ class LeveringController extends Controller
      */
     public function create($leverancierId, $productId)
     {
-        $details = DB::select('CALL spGetProductLeveringDetails(?, ?)', [$leverancierId, $productId]);
-        $leveringInfo = !empty($details) ? $details[0] : null;
+        // Haal product- en leveranciergegevens op via Model Levering (Stored Procedure)
+        $leveringInfo = Levering::getProductLeveringDetails((int) $leverancierId, (int) $productId);
 
         if (!$leveringInfo) {
             return redirect()->route('leverancier.index');
@@ -88,9 +89,8 @@ class LeveringController extends Controller
             'datum_eerstvolgende_levering' => 'nullable|date',
         ]);
 
-        // Haal product- en leveranciergegevens op
-        $details = DB::select('CALL spGetProductLeveringDetails(?, ?)', [$leverancierId, $productId]);
-        $leveringInfo = !empty($details) ? $details[0] : null;
+        // Haal product- en leveranciergegevens op via Model Levering
+        $leveringInfo = Levering::getProductLeveringDetails((int) $leverancierId, (int) $productId);
 
         if (!$leveringInfo) {
             return redirect()->route('leverancier.index');
@@ -103,16 +103,16 @@ class LeveringController extends Controller
                 ->with('inactief_melding', "Het product {$leveringInfo->ProductNaam} van de leverancier {$leveringInfo->LeverancierNaam} wordt niet meer geproduceerd");
         }
 
-        // Scenario 01: Product is actief -> toevoegen via Stored Procedure
+        // Scenario 01: Product is actief -> toevoegen via Model Levering (Stored Procedure)
         $aantal = (int) $request->input('aantal');
         $datumEerstvolgende = $request->input('datum_eerstvolgende_levering') ?: null;
 
-        DB::statement('CALL spVoegProductLeveringToe(?, ?, ?, ?)', [
-            $leverancierId,
-            $productId,
+        Levering::voegLeveringToe(
+            (int) $leverancierId,
+            (int) $productId,
             $aantal,
-            $datumEerstvolgende,
-        ]);
+            $datumEerstvolgende
+        );
 
         return redirect()->route('leverancier.producten', $leverancierId);
     }

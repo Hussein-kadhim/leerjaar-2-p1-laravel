@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
+use App\Models\Leverancier;
 
 class LeverancierController extends Controller
 {
@@ -12,8 +12,8 @@ class LeverancierController extends Controller
      */
     public function index()
     {
-        // Stored procedure aanroepen via PDO
-        $leveranciers = DB::select('CALL spGetLeveranciersOverzicht()');
+        // Stored procedure aanroepen via Model Leverancier (PDO)
+        $leveranciers = Leverancier::getLeveranciersOverzicht();
 
         return view('leverancier.index', [
             'leveranciers' => $leveranciers,
@@ -27,16 +27,15 @@ class LeverancierController extends Controller
      */
     public function producten($leverancierId)
     {
-        // Leveranciergegevens ophalen via Stored Procedure
-        $leverancierResult = DB::select('CALL spGetLeverancierById(?)', [$leverancierId]);
-        $leverancier = !empty($leverancierResult) ? $leverancierResult[0] : null;
+        // Leveranciergegevens ophalen via Model Leverancier (Stored Procedure)
+        $leverancier = Leverancier::getLeverancierById((int) $leverancierId);
 
         if (!$leverancier) {
             return redirect()->route('leverancier.index');
         }
 
-        // Geleverde producten ophalen via Stored Procedure
-        $producten = DB::select('CALL spGetGeleverdeProductenByLeverancierId(?)', [$leverancierId]);
+        // Geleverde producten ophalen via Model Leverancier (Stored Procedure)
+        $producten = Leverancier::getGeleverdeProducten((int) $leverancierId);
 
         $heeftProducten = count($producten) > 0;
         $melding = '';
