@@ -38,5 +38,21 @@ class Product extends Model
     {
         return $this->hasMany(ProductPerAllergeen::class, 'ProductId', 'Id');
     }
-}
 
+    /**
+     * Haalt een product op inclusief magazijnvoorraad.
+     */
+    public static function getProductMetVoorraad(int $productId)
+    {
+        return self::leftJoin('Magazijn', 'Product.Id', '=', 'Magazijn.ProductId')
+            ->where('Product.Id', $productId)
+            ->select(
+                'Product.Id',
+                'Product.Naam',
+                'Product.Barcode',
+                'Magazijn.AantalAanwezig',
+                'Magazijn.VerpakkingsEenheid'
+            )
+            ->first();
+    }
+}

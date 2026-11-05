@@ -3,39 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Levering;
+use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class LeveringController extends Controller
 {
     public function show($productId)
     {
-        // Product en Magazijn voorraad ophalen via leftJoin
-        $product = DB::table('Product')
-            ->leftJoin('Magazijn', 'Product.Id', '=', 'Magazijn.ProductId')
-            ->where('Product.Id', $productId)
-            ->select(
-                'Product.Id',
-                'Product.Naam',
-                'Product.Barcode',
-                'Magazijn.AantalAanwezig',
-                'Magazijn.VerpakkingsEenheid'
-            )
-            ->first();
+        // Product en Magazijn voorraad ophalen via Model Product
+        $product = Product::getProductMetVoorraad((int) $productId);
 
-        // Leveringen en leverancier ophalen via leftJoin
-        $leveringen = DB::table('ProductPerLeverancier')
-            ->leftJoin('Leverancier', 'ProductPerLeverancier.LeverancierId', '=', 'Leverancier.Id')
-            ->where('ProductPerLeverancier.ProductId', $productId)
-            ->select(
-                'ProductPerLeverancier.*',
-                'Leverancier.Naam as LeverancierNaam',
-                'Leverancier.ContactPersoon',
-                'Leverancier.LeverancierNummer',
-                'Leverancier.Mobiel'
-            )
-            ->orderBy('ProductPerLeverancier.DatumLevering', 'asc')
-            ->get();
+        // Leveringen en leverancier ophalen via Model Levering
+        $leveringen = Levering::getLeveringenByProductId((int) $productId);
 
         $leverancier = $leveringen->first();
 

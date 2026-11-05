@@ -28,5 +28,22 @@ class Magazijn extends Model
     {
         return $this->belongsTo(Product::class, 'ProductId', 'Id');
     }
-}
 
+    /**
+     * Haalt alle producten op met magazijnvoorraad voor het Magazijn overzicht.
+     */
+    public static function getMagazijnOverzicht()
+    {
+        return Product::select(
+                'Product.Id',
+                'Product.Naam',
+                'Product.Barcode',
+                'Magazijn.VerpakkingsEenheid',
+                'Magazijn.AantalAanwezig'
+            )
+            ->leftJoin('Magazijn', 'Product.Id', '=', 'Magazijn.ProductId')
+            ->where('Product.IsActief', 1)
+            ->orderBy('Product.Barcode', 'asc')
+            ->get();
+    }
+}

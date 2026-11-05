@@ -44,6 +44,24 @@ class Levering extends Model
     }
 
     /**
+     * Haalt alle leveringen van een specifiek product op inclusief leverancier (Opdracht 1 US 1).
+     */
+    public static function getLeveringenByProductId(int $productId)
+    {
+        return self::leftJoin('Leverancier', 'ProductPerLeverancier.LeverancierId', '=', 'Leverancier.Id')
+            ->where('ProductPerLeverancier.ProductId', $productId)
+            ->select(
+                'ProductPerLeverancier.*',
+                'Leverancier.Naam as LeverancierNaam',
+                'Leverancier.ContactPersoon',
+                'Leverancier.LeverancierNummer',
+                'Leverancier.Mobiel'
+            )
+            ->orderBy('ProductPerLeverancier.DatumLevering', 'asc')
+            ->get();
+    }
+
+    /**
      * Haalt details op voor het leveringscherm (Wireframe-04).
      */
     public static function getProductLeveringDetails(int $leverancierId, int $productId): ?object

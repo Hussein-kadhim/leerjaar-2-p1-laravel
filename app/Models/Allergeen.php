@@ -27,5 +27,16 @@ class Allergeen extends Model
     {
         return $this->hasMany(ProductPerAllergeen::class, 'AllergeenId', 'Id');
     }
-}
 
+    /**
+     * Haalt alle allergenen op voor een specifiek product.
+     */
+    public static function getByProductId(int $productId)
+    {
+        return self::join('ProductPerAllergeen', 'Allergeen.Id', '=', 'ProductPerAllergeen.AllergeenId')
+            ->where('ProductPerAllergeen.ProductId', $productId)
+            ->select('Allergeen.Naam', 'Allergeen.Omschrijving')
+            ->orderBy('Allergeen.Naam', 'asc')
+            ->get();
+    }
+}
