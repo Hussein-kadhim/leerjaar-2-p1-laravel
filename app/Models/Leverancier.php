@@ -27,7 +27,7 @@ class Leverancier extends Model
     ];
 
     /**
-     * Relatie naar leveringen via ProductPerLeverancier.
+     * Relatie: 1 Leverancier heeft meerdere leveringen via ProductPerLeverancier.
      */
     public function leveringen(): HasMany
     {
@@ -35,30 +35,62 @@ class Leverancier extends Model
     }
 
     /**
-     * Haalt overzicht van leveranciers op inclusief aantal verschillende producten via Stored Procedure (Wireframe-01).
-     * Gesorteerd op AantalVerschillendeProducten DESC.
+     * Haalt overzicht van leveranciers op via het Model.
+     * Telt het aantal unieke producten en sorteert aflopend (Wireframe-01).
      */
-    public static function getLeveranciersOverzicht(): array
+    public static function getLeveranciersOverzicht()
     {
-        return DB::select('CALL spGetLeveranciersOverzicht()');
+        return self::select('Leverancier.*')
+            ->selectRaw('COUNT(DISTINCT ProductPerLeverancier.ProductId) as AantalVerschillendeProducten')
+            ->leftJoin('ProductPerLeverancier', 'Leverancier.Id', '=', 'ProductPerLeverancier.LeverancierId')
+            ->groupBy(
+                'Leverancier.Id',
+                'Leverancier.Naam',
+                'Leverancier.ContactPersoon',
+                'Leverancier.LeverancierNummer',
+                'Leverancier.Mobiel',
+                'Leverancier.IsActief',
+                'Leverancier.Opmerking',
+                'Leverancier.DatumAangemaakt',
+                'Leverancier.DatumGewijzigd'
+            )
+            ->orderByDesc('AantalVerschillendeProducten')
+            ->get();
     }
 
     /**
-     * Haalt specifieke leverancier op per Id via Stored Procedure.
+     * Haalt 1 specifieke leverancier op via het Model.
      */
-    public static function getLeverancierById(int $leverancierId): ?object
+    public static function getLeverancierById(int $leverancierId): ?self
     {
-        $result = DB::select('CALL spGetLeverancierById(?)', [$leverancierId]);
-        return !empty($result) ? $result[0] : null;
+        return self::find($leverancierId);
     }
 
     /**
-     * Haalt alle geleverde producten van een leverancier op via Stored Procedure (Wireframe-02 & Wireframe-03).
-     * Gesorteerd op Aantal in Magazijn DESC.
+     * Haalt alle geleverde producten van een leverancier op via de Models (Wireframe-02 & Wireframe-03).
+     * Gesorteerd op Aantal in Magazijn aflopend.
      */
-    public static function getGeleverdeProducten(int $leverancierId): array
+    public static function getGeleverdeProducten(int $leverancierId)
     {
-        return DB::select('CALL spGetGeleverdeProductenByLeverancierId(?)', [$leverancierId]);
+        return Product::select(
+                'Product.Id as ProductId',
+                'Product.Naam as ProductNaam',
+                'Product.IsActief as ProductIsActief',
+                'Magazijn.AantalAanwezig',
+                'Magazijn.VerpakkingsEenheid',
+                DB::raw('MAX(ProductPerLeverancier.DatumLevering) as LaatsteLevering')
+            )
+            ->join('ProductPerLeverancier', 'Product.Id', '=', 'ProductPerLeverancier.ProductId')
+            ->leftJoin('Magazijn', 'Product.Id', '=', 'Magazijn.ProductId')
+            ->where('ProductPerLeverancier.LeverancierId', $leverancierId)
+            ->groupBy(
+                'Product.Id',
+                'Product.Naam',
+                'Product.IsActief',
+                'Magazijn.AantalAanwezig',
+                'Magazijn.VerpakkingsEenheid'
+            )
+            ->orderByDesc('Magazijn.AantalAanwezig')
+            ->get();
     }
 }
-

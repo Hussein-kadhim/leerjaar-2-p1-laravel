@@ -12,7 +12,7 @@ class LeverancierController extends Controller
      */
     public function index()
     {
-        // Stored procedure aanroepen via Model Leverancier (PDO)
+        // Data ophalen via Model Leverancier (MVC)
         $leveranciers = Leverancier::getLeveranciersOverzicht();
 
         return view('leverancier.index', [
@@ -27,14 +27,14 @@ class LeverancierController extends Controller
      */
     public function producten($leverancierId)
     {
-        // Leveranciergegevens ophalen via Model Leverancier (Stored Procedure)
+        // Leveranciergegevens ophalen via Model Leverancier
         $leverancier = Leverancier::getLeverancierById((int) $leverancierId);
 
         if (!$leverancier) {
             return redirect()->route('leverancier.index');
         }
 
-        // Geleverde producten ophalen via Model Leverancier (Stored Procedure)
+        // Geleverde producten ophalen via Model Leverancier
         $producten = Leverancier::getGeleverdeProducten((int) $leverancierId);
 
         $heeftProducten = count($producten) > 0;

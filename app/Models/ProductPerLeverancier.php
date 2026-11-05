@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\DB;
 
 class ProductPerLeverancier extends Model
 {
@@ -44,25 +43,53 @@ class ProductPerLeverancier extends Model
     }
 
     /**
-     * Details voor levering product ophalen via Stored Procedure (Wireframe-04).
+     * Haalt details op voor het levering product scherm (Wireframe-04) via de Models.
      */
     public static function getProductLeveringDetails(int $leverancierId, int $productId): ?object
     {
-        $details = DB::select('CALL spGetProductLeveringDetails(?, ?)', [$leverancierId, $productId]);
-        return !empty($details) ? $details[0] : null;
+        $product = Product::find($productId);
+        $leverancier = Leverancier::find($leverancierId);
+
+        if (!$product || !$leverancier) {
+            return null;
+        }
+
+        return (object) [
+            'ProductId' => $product->Id,
+            'ProductNaam' => $product->Naam,
+            'ProductIsActief' => (bool) $product->IsActief,
+            'LeverancierId' => $leverancier->Id,
+            'LeverancierNaam' => $leverancier->Naam,
+            'ContactPersoon' => $leverancier->ContactPersoon,
+            'Mobiel' => $leverancier->Mobiel,
+        ];
     }
 
     /**
-     * Voegt een nieuwe levering toe en werkt de voorraad bij via Stored Procedure.
+     * Voegt een levering toe en verhoogt de magazijnvoorraad via Eloquent Models.
      */
     public static function voegLeveringToe(int $leverancierId, int $productId, int $aantal, ?string $datumEerstvolgende = null): bool
     {
-        return DB::statement('CALL spVoegProductLeveringToe(?, ?, ?, ?)', [
-            $leverancierId,
-            $productId,
-            $aantal,
-            $datumEerstvolgende,
+        // 1. Nieuwe levering opslaan via Model
+        self::create([
+            'LeverancierId' => $leverancierId,
+            'ProductId' => $productId,
+            'DatumLevering' => now()->toDateString(),
+            'Aantal' => $aantal,
+            'DatumEerstVolgendeLevering' => $datumEerstvolgende,
+            'IsActief' => 1,
+            'DatumAangemaakt' => now(),
+            'DatumGewijzigd' => now(),
         ]);
+
+        // 2. Magazijnvoorraad bijwerken via Model Magazijn
+        $magazijn = Magazijn::where('ProductId', $productId)->first();
+        if ($magazijn) {
+            $magazijn->AantalAanwezig = ($magazijn->AantalAanwezig ?? 0) + $aantal;
+            $magazijn->DatumGewijzigd = now();
+            $magazijn->save();
+        }
+
+        return true;
     }
 }
-

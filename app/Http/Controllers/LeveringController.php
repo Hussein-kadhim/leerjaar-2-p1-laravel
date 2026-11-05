@@ -63,7 +63,7 @@ class LeveringController extends Controller
      */
     public function create($leverancierId, $productId)
     {
-        // Haal product- en leveranciergegevens op via Model Levering (Stored Procedure)
+        // Haal product- en leveranciergegevens op via Model Levering (MVC)
         $leveringInfo = Levering::getProductLeveringDetails((int) $leverancierId, (int) $productId);
 
         if (!$leveringInfo) {
@@ -103,7 +103,7 @@ class LeveringController extends Controller
                 ->with('inactief_melding', "Het product {$leveringInfo->ProductNaam} van de leverancier {$leveringInfo->LeverancierNaam} wordt niet meer geproduceerd");
         }
 
-        // Scenario 01: Product is actief -> toevoegen via Model Levering (Stored Procedure)
+        // Scenario 01: Product is actief -> toevoegen via Model Levering (MVC)
         $aantal = (int) $request->input('aantal');
         $datumEerstvolgende = $request->input('datum_eerstvolgende_levering') ?: null;
 
