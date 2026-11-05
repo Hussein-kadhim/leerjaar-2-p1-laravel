@@ -43,6 +43,12 @@ Route::middleware('auth')->group(function () {
     // Detailscherm Levering Product
     Route::get('/levering/{leverancierId}/{productId}/create', [LeveringController::class, 'create'])->name('levering.create');
     Route::post('/levering/{leverancierId}/{productId}', [LeveringController::class, 'store'])->name('levering.store');
+
+    // BE-Opdracht 03: Wijzigen Leveranciers
+    Route::get('/leverancier/wijzigen', [LeverancierController::class, 'wijzigenIndex'])->name('leverancier.wijzigen');
+    Route::get('/leverancier/{leverancierId}/details', [LeverancierController::class, 'details'])->name('leverancier.details');
+    Route::get('/leverancier/{leverancierId}/edit', [LeverancierController::class, 'edit'])->name('leverancier.edit');
+    Route::post('/leverancier/{leverancierId}/update', [LeverancierController::class, 'update'])->name('leverancier.update');
 });
 
 require __DIR__.'/auth.php';
