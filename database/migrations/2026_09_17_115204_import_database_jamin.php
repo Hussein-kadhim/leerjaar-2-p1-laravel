@@ -26,6 +26,7 @@ return new class extends Migration
         DB::statement('DROP TABLE IF EXISTS ProductPerLeverancier');
         DB::statement('DROP TABLE IF EXISTS Magazijn');
         DB::statement('DROP TABLE IF EXISTS Leverancier');
+        DB::statement('DROP TABLE IF EXISTS Contact');
         DB::statement('DROP TABLE IF EXISTS Product');
         DB::statement('DROP TABLE IF EXISTS Allergeen');
         DB::statement('DROP PROCEDURE IF EXISTS spGetLeveranciersOverzicht');
@@ -33,6 +34,9 @@ return new class extends Migration
         DB::statement('DROP PROCEDURE IF EXISTS spGetGeleverdeProductenByLeverancierId');
         DB::statement('DROP PROCEDURE IF EXISTS spGetProductLeveringDetails');
         DB::statement('DROP PROCEDURE IF EXISTS spVoegProductLeveringToe');
+        DB::statement('DROP PROCEDURE IF EXISTS spGetLeveranciersOverzichtPaginated');
+        DB::statement('DROP PROCEDURE IF EXISTS spGetLeverancierDetailsById');
+        DB::statement('DROP PROCEDURE IF EXISTS spWijzigLeverancier');
 
         DB::statement('SET FOREIGN_KEY_CHECKS=1');
     }
