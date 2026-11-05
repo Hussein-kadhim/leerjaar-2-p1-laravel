@@ -40,6 +40,12 @@
                         >
                             Overzicht Leveranciers
                         </a>
+                        <a
+                            href="{{ route('leverancier.wijzigen') }}"
+                            class="inline-block px-4 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-sm text-sm leading-normal"
+                        >
+                            Wijzigen Leveranciers
+                        </a>
                     @else
                         <a
                             href="{{ route('login') }}"
