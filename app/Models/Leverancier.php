@@ -59,7 +59,6 @@ class Leverancier extends Model
                 'Leverancier.ContactPersoon',
                 'Leverancier.LeverancierNummer',
                 'Leverancier.Mobiel',
-                'Leverancier.ContactId',
                 'Leverancier.IsActief',
                 'Leverancier.Opmerking',
                 'Leverancier.DatumAangemaakt',
@@ -91,16 +90,29 @@ class Leverancier extends Model
      */
     public static function getDetailsById(int $leverancierId): ?object
     {
-        // Kan via Stored Procedure of Eloquent; we ondersteunen beide!
-        $result = DB::select('CALL spGetLeverancierDetailsById(?)', [$leverancierId]);
-        if (!empty($result)) {
-            return $result[0];
+        // 1. Probeer via Stored Procedure
+        try {
+            $result = DB::select('CALL spGetLeverancierDetailsById(?)', [$leverancierId]);
+            if (!empty($result)) {
+                return $result[0];
+            }
+        } catch (\Throwable $e) {
+            // Stored procedure bestaat mogelijk nog niet in MySQL
         }
 
-        // Fallback via Eloquent
-        $leverancier = self::with('contact')->find($leverancierId);
+        // 2. Fallback via Model
+        $leverancier = self::find($leverancierId);
         if (!$leverancier) {
             return null;
+        }
+
+        $contact = null;
+        if (!empty($leverancier->ContactId)) {
+            try {
+                $contact = Contact::find($leverancier->ContactId);
+            } catch (\Throwable $e) {
+                // Tabel Contact bestaat mogelijk nog niet
+            }
         }
 
         return (object) [
@@ -109,11 +121,11 @@ class Leverancier extends Model
             'ContactPersoon' => $leverancier->ContactPersoon,
             'LeverancierNummer' => $leverancier->LeverancierNummer,
             'Mobiel' => $leverancier->Mobiel,
-            'ContactId' => $leverancier->ContactId,
-            'Straatnaam' => $leverancier->contact?->Straat ?? '',
-            'Huisnummer' => $leverancier->contact?->Huisnummer ?? '',
-            'Postcode' => $leverancier->contact?->Postcode ?? '',
-            'Stad' => $leverancier->contact?->Stad ?? '',
+            'ContactId' => $leverancier->ContactId ?? null,
+            'Straatnaam' => $contact?->Straat ?? '',
+            'Huisnummer' => $contact?->Huisnummer ?? '',
+            'Postcode' => $contact?->Postcode ?? '',
+            'Stad' => $contact?->Stad ?? '',
         ];
     }
 
@@ -132,20 +144,44 @@ class Leverancier extends Model
             throw new \Exception('Mobielnummer is al in gebruik bij een andere leverancier.');
         }
 
-        // Aanroep via Stored Procedure (Verplicht: Stored Procedures & PDO)
-        DB::statement('CALL spWijzigLeverancier(?, ?, ?, ?, ?, ?, ?, ?, ?)', [
-            $leverancierId,
-            $data['Naam'],
-            $data['ContactPersoon'],
-            $data['LeverancierNummer'],
-            $data['Mobiel'],
-            $data['Straatnaam'],
-            $data['Huisnummer'],
-            $data['Postcode'],
-            $data['Stad'],
-        ]);
+        // Probeer via Stored Procedure
+        try {
+            DB::statement('CALL spWijzigLeverancier(?, ?, ?, ?, ?, ?, ?, ?, ?)', [
+                $leverancierId,
+                $data['Naam'],
+                $data['ContactPersoon'],
+                $data['LeverancierNummer'],
+                $data['Mobiel'],
+                $data['Straatnaam'],
+                $data['Huisnummer'],
+                $data['Postcode'],
+                $data['Stad'],
+            ]);
+            return true;
+        } catch (\Throwable $e) {
+            // Fallback via Model als stored procedure ontbreekt
+            $leverancier = self::find($leverancierId);
+            if ($leverancier) {
+                $leverancier->Naam = $data['Naam'];
+                $leverancier->ContactPersoon = $data['ContactPersoon'];
+                $leverancier->LeverancierNummer = $data['LeverancierNummer'];
+                $leverancier->Mobiel = $data['Mobiel'];
+                $leverancier->save();
 
-        return true;
+                if (!empty($leverancier->ContactId)) {
+                    $contact = Contact::find($leverancier->ContactId);
+                    if ($contact) {
+                        $contact->Straat = $data['Straatnaam'];
+                        $contact->Huisnummer = $data['Huisnummer'];
+                        $contact->Postcode = $data['Postcode'];
+                        $contact->Stad = $data['Stad'];
+                        $contact->save();
+                    }
+                }
+                return true;
+            }
+            throw $e;
+        }
     }
 
     /**
