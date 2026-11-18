@@ -18,8 +18,11 @@
                     <x-nav-link :href="route('magazijn.index')" :active="request()->routeIs('magazijn.*', 'levering.show', 'allergeen.*')">
                         {{ __('Overzicht Magazijn Jamin') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('leverancier.index')" :active="request()->routeIs('leverancier.*', 'levering.create', 'levering.store')">
+                    <x-nav-link :href="route('leverancier.index')" :active="request()->routeIs('leverancier.index', 'leverancier.producten', 'levering.create', 'levering.store')">
                         {{ __('Overzicht Leveranciers') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('leverancier.wijzigen')" :active="request()->routeIs('leverancier.wijzigen', 'leverancier.details', 'leverancier.edit')">
+                        {{ __('Wijzigen Leveranciers') }}
                     </x-nav-link>
                 </div>
             </div>

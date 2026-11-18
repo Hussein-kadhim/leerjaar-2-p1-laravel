@@ -36,13 +36,36 @@ CREATE TABLE Product
 );
 
 
--- Step : 02.2
+-- Step : 02.2a
+/*********************************************************************************
+-- Doel : Maak een nieuwe tabel aan heet Contact.
+-- *******************************************************************************
+-- Versie     Datum          Auteur			Omschrijving
+-- ******     **********     **********		**************
+-- 01         04-11-2026     KadhimH		CREATE TABLE Contact gemaakt (Stamtabel)	 
+**********************************************************************************/ 
+CREATE TABLE Contact 
+(
+     Id                  INT UNSIGNED AUTO_INCREMENT PRIMARY KEY
+    ,Straat              VARCHAR(100) NOT NULL
+    ,Huisnummer          VARCHAR(20) NOT NULL
+    ,Postcode            VARCHAR(10) NOT NULL
+    ,Stad                VARCHAR(100) NOT NULL
+    ,IsActief            BIT NOT NULL DEFAULT 1
+    ,Opmerking           VARCHAR(250) NULL DEFAULT NULL
+    ,DatumAangemaakt     DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6)
+    ,DatumGewijzigd      DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)
+);
+
+
+-- Step : 02.2b
 /*********************************************************************************
 -- Doel : Maak een nieuwe tabel aan heet Leverancier.
 -- *******************************************************************************
 -- Versie     Datum          Auteur			Omschrijving
 -- ******     **********     **********		**************
 -- 01         13-09-2026     KadhimH		CREATE TABLE Leverancier gemaakt (Stamtabel)	 
+-- 02         04-11-2026     KadhimH		ContactId FK en Unique Mobiel toegevoegd	 
 **********************************************************************************/ 
 CREATE TABLE Leverancier 
 (
@@ -51,10 +74,13 @@ CREATE TABLE Leverancier
     ,ContactPersoon      VARCHAR(100) NOT NULL
     ,LeverancierNummer   VARCHAR(20) NOT NULL
     ,Mobiel              VARCHAR(20) NOT NULL
+    ,ContactId           INT UNSIGNED NULL DEFAULT NULL
     ,IsActief            BIT NOT NULL DEFAULT 1
     ,Opmerking           VARCHAR(250) NULL DEFAULT NULL
     ,DatumAangemaakt     DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6)
     ,DatumGewijzigd      DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)
+    ,CONSTRAINT FK_Leverancier_ContactId FOREIGN KEY (ContactId) REFERENCES Contact(Id) ON DELETE SET NULL ON UPDATE CASCADE
+    ,CONSTRAINT UQ_Leverancier_Mobiel UNIQUE (Mobiel)
 );
 
 
@@ -188,13 +214,42 @@ VALUES (1, 'Mintnopjes', '8719587231278', 1, NULL, NOW(6), NOW(6))
       ,(13, 'Zoute Ruitjes', '8719587323256', 1, NULL, NOW(6), NOW(6));
 
 
--- Step : 04.2
+-- Step : 04.2a
 /*********************************************************************************
--- Doel : Voeg 5 rijen toe met INSERT aan tabel Leverancier
+-- Doel : Voeg 6 rijen toe met INSERT aan tabel Contact
+-- *******************************************************************************
+-- Versie     Datum          Auteur			Omschrijving
+-- ******     **********     **********		**************
+-- 01         04-11-2026     KadhimH		6 rijen gevoegd met insert aan tabel Contact 
+**********************************************************************************/ 
+INSERT INTO Contact
+(
+     Id
+    ,Straat
+    ,Huisnummer
+    ,Postcode
+    ,Stad
+    ,IsActief
+    ,Opmerking
+    ,DatumAangemaakt
+    ,DatumGewijzigd
+)
+VALUES (1, 'Van Gilslaan', '34', '1045CB', 'Hilvarenbeek', 1, NULL, NOW(6), NOW(6))
+      ,(2, 'Den Dolderpad', '2', '1067RC', 'Utrecht', 1, NULL, NOW(6), NOW(6))
+      ,(3, 'Fredo Raalteweg', '257', '1236OP', 'Nijmegen', 1, NULL, NOW(6), NOW(6))
+      ,(4, 'Bertrand Russellhof', '21', '2034AP', 'Den Haag', 1, NULL, NOW(6), NOW(6))
+      ,(5, 'Leon van Bonstraat', '213', '145XC', 'Lunteren', 1, NULL, NOW(6), NOW(6))
+      ,(6, 'Bea van Lingenlaan', '234', '2197FG', 'Sint Pancras', 1, NULL, NOW(6), NOW(6));
+
+
+-- Step : 04.2b
+/*********************************************************************************
+-- Doel : Voeg 6 rijen toe met INSERT aan tabel Leverancier
 -- *******************************************************************************
 -- Versie     Datum          Auteur			Omschrijving
 -- ******     **********     **********		**************
 -- 01         13-09-2026     KadhimH		5 rijen gevoegd met insert aan tabel Leverancier 
+-- 02         04-11-2026     KadhimH		ContactId gekoppeld aan Leverancier
 **********************************************************************************/ 
 INSERT INTO Leverancier
 (
@@ -203,17 +258,18 @@ INSERT INTO Leverancier
     ,ContactPersoon
     ,LeverancierNummer
     ,Mobiel
+    ,ContactId
     ,IsActief
     ,Opmerking
     ,DatumAangemaakt
     ,DatumGewijzigd
 )
-VALUES (1, 'Venco', 'Bert van Linge', 'L1029384719', '06-28493827', 1, NULL, NOW(6), NOW(6))
-      ,(2, 'Astra Sweets', 'Jasper del Monte', 'L1029284315', '06-39398734', 1, NULL, NOW(6), NOW(6))
-      ,(3, 'Haribo', 'Sven Stalman', 'L1029324748', '06-24383291', 1, NULL, NOW(6), NOW(6))
-      ,(4, 'Basset', 'Joyce Stelterberg', 'L1023845773', '06-48293823', 1, NULL, NOW(6), NOW(6))
-      ,(5, 'De Bron', 'Remco Veenstra', 'L1023857736', '06-34291234', 1, NULL, NOW(6), NOW(6))
-      ,(6, 'Quality Street', 'Johan Nooij', 'L1029234586', '06-23458456', 1, NULL, NOW(6), NOW(6));
+VALUES (1, 'Venco', 'Bert van Linge', 'L1029384719', '06-28493827', 1, 1, NULL, NOW(6), NOW(6))
+      ,(2, 'Astra Sweets', 'Jasper del Monte', 'L1029284315', '06-39398734', 2, 1, NULL, NOW(6), NOW(6))
+      ,(3, 'Haribo', 'Sven Stalman', 'L1029324748', '06-24383291', 3, 1, NULL, NOW(6), NOW(6))
+      ,(4, 'Basset', 'Joyce Stelterberg', 'L1023845773', '06-48293823', 4, 1, NULL, NOW(6), NOW(6))
+      ,(5, 'De Bron', 'Remco Veenstra', 'L1023857736', '06-34291234', 5, 1, NULL, NOW(6), NOW(6))
+      ,(6, 'Quality Street', 'Johan Nooij', 'L1029234586', '06-23458456', 6, 1, NULL, NOW(6), NOW(6));
 
 
 -- Step : 04.3
@@ -450,5 +506,93 @@ BEGIN
     SET AantalAanwezig = COALESCE(AantalAanwezig, 0) + p_Aantal,
         DatumGewijzigd = NOW(6)
     WHERE ProductId = p_ProductId;
+END;
+
+
+-- ==============================================================================
+-- DEEL 5: STORED PROCEDURES (Voor Opdracht 3: Wijzigen leverancier)
+-- ==============================================================================
+
+DROP PROCEDURE IF EXISTS spGetLeveranciersOverzichtPaginated;
+CREATE PROCEDURE spGetLeveranciersOverzichtPaginated(IN p_Limit INT, IN p_Offset INT)
+BEGIN
+    SELECT 
+         Id
+        ,Naam
+        ,ContactPersoon
+        ,LeverancierNummer
+        ,Mobiel
+    FROM Leverancier
+    ORDER BY Id ASC
+    LIMIT p_Limit OFFSET p_Offset;
+END;
+
+
+DROP PROCEDURE IF EXISTS spGetLeverancierDetailsById;
+CREATE PROCEDURE spGetLeverancierDetailsById(IN p_LeverancierId INT)
+BEGIN
+    SELECT 
+         l.Id AS LeverancierId
+        ,l.Naam
+        ,l.ContactPersoon
+        ,l.LeverancierNummer
+        ,l.Mobiel
+        ,c.Id AS ContactId
+        ,c.Straat AS Straatnaam
+        ,c.Huisnummer
+        ,c.Postcode
+        ,c.Stad
+    FROM Leverancier l
+    LEFT JOIN Contact c ON l.ContactId = c.Id
+    WHERE l.Id = p_LeverancierId;
+END;
+
+
+DROP PROCEDURE IF EXISTS spWijzigLeverancier;
+CREATE PROCEDURE spWijzigLeverancier(
+    IN p_LeverancierId INT,
+    IN p_Naam VARCHAR(100),
+    IN p_ContactPersoon VARCHAR(100),
+    IN p_LeverancierNummer VARCHAR(20),
+    IN p_Mobiel VARCHAR(20),
+    IN p_Straat VARCHAR(100),
+    IN p_Huisnummer VARCHAR(20),
+    IN p_Postcode VARCHAR(10),
+    IN p_Stad VARCHAR(100)
+)
+BEGIN
+    DECLARE v_ContactId INT;
+
+    -- Haal gekoppeld ContactId op
+    SELECT ContactId INTO v_ContactId
+    FROM Leverancier
+    WHERE Id = p_LeverancierId;
+
+    -- Update Leverancier
+    UPDATE Leverancier
+    SET Naam = p_Naam,
+        ContactPersoon = p_ContactPersoon,
+        LeverancierNummer = p_LeverancierNummer,
+        Mobiel = p_Mobiel,
+        DatumGewijzigd = NOW(6)
+    WHERE Id = p_LeverancierId;
+
+    -- Update Contact
+    IF v_ContactId IS NOT NULL THEN
+        UPDATE Contact
+        SET Straat = p_Straat,
+            Huisnummer = p_Huisnummer,
+            Postcode = p_Postcode,
+            Stad = p_Stad,
+            DatumGewijzigd = NOW(6)
+        WHERE Id = v_ContactId;
+    ELSE
+        INSERT INTO Contact (Straat, Huisnummer, Postcode, Stad, IsActief, DatumAangemaakt, DatumGewijzigd)
+        VALUES (p_Straat, p_Huisnummer, p_Postcode, p_Stad, 1, NOW(6), NOW(6));
+
+        UPDATE Leverancier
+        SET ContactId = LAST_INSERT_ID()
+        WHERE Id = p_LeverancierId;
+    END IF;
 END;
 
