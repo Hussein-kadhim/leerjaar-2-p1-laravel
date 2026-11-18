@@ -45,16 +45,44 @@
                     </tbody>
                 </table>
 
-                {{-- Server-side Pagination (max 4 per pagina) --}}
-                <div class="mt-4 mb-6">
-                    {{ $leveranciers->links() }}
-                </div>
+                {{-- Onderbalk met paginering links en Home knop rechts direct onder de tabel volgens Wireframe-02 --}}
+                <div class="mt-4 flex flex-row justify-between items-center">
+                    {{-- Nette paginering in wireframe-stijl zonder Tailwind tekstblokken --}}
+                    <div>
+                        @if ($leveranciers->hasPages())
+                            <div class="flex items-center space-x-1 text-sm">
+                                {{-- Vorige pagina knop --}}
+                                @if ($leveranciers->onFirstPage())
+                                    <span class="px-3 py-1 border border-gray-300 text-gray-400 bg-gray-50 cursor-not-allowed">&lt;</span>
+                                @else
+                                    <a href="{{ $leveranciers->previousPageUrl() }}" class="px-3 py-1 border border-black bg-white hover:bg-gray-100 text-black">&lt;</a>
+                                @endif
 
-                {{-- Home knop rechtsonder --}}
-                <div class="mt-6 flex justify-end">
-                    <a href="{{ route('dashboard') }}" class="px-6 py-2 border border-black bg-white hover:bg-gray-100 text-black font-normal text-sm">
-                        home
-                    </a>
+                                {{-- Paginanummers --}}
+                                @foreach ($leveranciers->getUrlRange(1, $leveranciers->lastPage()) as $page => $url)
+                                    @if ($page == $leveranciers->currentPage())
+                                        <span class="px-3 py-1 border border-black bg-gray-200 text-black font-semibold">{{ $page }}</span>
+                                    @else
+                                        <a href="{{ $url }}" class="px-3 py-1 border border-black bg-white hover:bg-gray-100 text-black">{{ $page }}</a>
+                                    @endif
+                                @endforeach
+
+                                {{-- Volgende pagina knop --}}
+                                @if ($leveranciers->hasMorePages())
+                                    <a href="{{ $leveranciers->nextPageUrl() }}" class="px-3 py-1 border border-black bg-white hover:bg-gray-100 text-black">&gt;</a>
+                                @else
+                                    <span class="px-3 py-1 border border-gray-300 text-gray-400 bg-gray-50 cursor-not-allowed">&gt;</span>
+                                @endif
+                            </div>
+                        @endif
+                    </div>
+
+                    {{-- Home knop rechtsonder direct zichtbaar exact volgens Wireframe-02 --}}
+                    <div>
+                        <a href="{{ route('dashboard') }}" class="px-6 py-2 border border-black bg-white hover:bg-gray-100 text-black font-normal text-sm inline-block">
+                            home
+                        </a>
+                    </div>
                 </div>
 
             </div>
