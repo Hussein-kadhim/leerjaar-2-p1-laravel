@@ -35,124 +35,152 @@
                     </script>
                 @endif
 
-                {{-- Formulier volgens Wireframe-04 --}}
-                <form action="{{ route('leverancier.update', $leverancier->LeverancierId) }}" method="POST" class="max-w-xl space-y-4">
+                {{-- Formulier volgens Wireframe-04 (Label links, input rechts) --}}
+                <form action="{{ route('leverancier.update', $leverancier->LeverancierId) }}" method="POST" class="max-w-xl">
                     @csrf
 
-                    <div>
-                        <label for="Naam" class="block text-base mb-1">Naam:</label>
-                        <input type="text" 
-                               name="Naam" 
-                               id="Naam" 
-                               value="{{ old('Naam', $leverancier->Naam) }}" 
-                               required 
-                               style="width: 280px; max-width: 100%; display: block;"
-                               class="border border-black p-2 text-base rounded-none focus:outline-none focus:ring-1 focus:ring-black">
-                        @error('Naam')
-                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
+                    <table class="w-full border-separate border-spacing-y-3 mb-6">
+                        <tbody>
+                            <tr>
+                                <td class="w-48 align-middle text-base font-normal pr-4">
+                                    <label for="Naam">Naam:</label>
+                                </td>
+                                <td>
+                                    <input type="text" 
+                                           name="Naam" 
+                                           id="Naam" 
+                                           value="{{ old('Naam', $leverancier->Naam) }}" 
+                                           required 
+                                           class="w-full border border-black p-2 text-base rounded-none focus:outline-none focus:ring-1 focus:ring-black">
+                                    @error('Naam')
+                                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </td>
+                            </tr>
 
-                    <div>
-                        <label for="ContactPersoon" class="block text-base mb-1">Contactpersoon:</label>
-                        <input type="text" 
-                               name="ContactPersoon" 
-                               id="ContactPersoon" 
-                               value="{{ old('ContactPersoon', $leverancier->ContactPersoon) }}" 
-                               required 
-                               style="width: 280px; max-width: 100%; display: block;"
-                               class="border border-black p-2 text-base rounded-none focus:outline-none focus:ring-1 focus:ring-black">
-                        @error('ContactPersoon')
-                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
+                            <tr>
+                                <td class="w-48 align-middle text-base font-normal pr-4">
+                                    <label for="ContactPersoon">Contactpersoon:</label>
+                                </td>
+                                <td>
+                                    <input type="text" 
+                                           name="ContactPersoon" 
+                                           id="ContactPersoon" 
+                                           value="{{ old('ContactPersoon', $leverancier->ContactPersoon) }}" 
+                                           required 
+                                           class="w-full border border-black p-2 text-base rounded-none focus:outline-none focus:ring-1 focus:ring-black">
+                                    @error('ContactPersoon')
+                                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </td>
+                            </tr>
 
-                    <div>
-                        <label for="LeverancierNummer" class="block text-base mb-1">Leveranciernummer:</label>
-                        <input type="text" 
-                               name="LeverancierNummer" 
-                               id="LeverancierNummer" 
-                               value="{{ old('LeverancierNummer', $leverancier->LeverancierNummer) }}" 
-                               required 
-                               style="width: 280px; max-width: 100%; display: block;"
-                               class="border border-black p-2 text-base rounded-none focus:outline-none focus:ring-1 focus:ring-black">
-                        @error('LeverancierNummer')
-                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
+                            <tr>
+                                <td class="w-48 align-middle text-base font-normal pr-4">
+                                    <label for="LeverancierNummer">Leveranciernummer:</label>
+                                </td>
+                                <td>
+                                    <input type="text" 
+                                           name="LeverancierNummer" 
+                                           id="LeverancierNummer" 
+                                           value="{{ old('LeverancierNummer', $leverancier->LeverancierNummer) }}" 
+                                           required 
+                                           class="w-full border border-black p-2 text-base rounded-none focus:outline-none focus:ring-1 focus:ring-black">
+                                    @error('LeverancierNummer')
+                                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </td>
+                            </tr>
 
-                    <div>
-                        <label for="Mobiel" class="block text-base mb-1">Mobiel:</label>
-                        <input type="text" 
-                               name="Mobiel" 
-                               id="Mobiel" 
-                               value="{{ old('Mobiel', $leverancier->Mobiel) }}" 
-                               required 
-                               style="width: 280px; max-width: 100%; display: block;"
-                               class="border border-black p-2 text-base rounded-none focus:outline-none focus:ring-1 focus:ring-black">
-                        @error('Mobiel')
-                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
+                            <tr>
+                                <td class="w-48 align-middle text-base font-normal pr-4">
+                                    <label for="Mobiel">Mobiel:</label>
+                                </td>
+                                <td>
+                                    <input type="text" 
+                                           name="Mobiel" 
+                                           id="Mobiel" 
+                                           value="{{ old('Mobiel', $leverancier->Mobiel) }}" 
+                                           required 
+                                           class="w-full border border-black p-2 text-base rounded-none focus:outline-none focus:ring-1 focus:ring-black">
+                                    @error('Mobiel')
+                                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </td>
+                            </tr>
 
-                    <div>
-                        <label for="Straatnaam" class="block text-base mb-1">Straatnaam:</label>
-                        <input type="text" 
-                               name="Straatnaam" 
-                               id="Straatnaam" 
-                               value="{{ old('Straatnaam', $leverancier->Straatnaam) }}" 
-                               required 
-                               style="width: 280px; max-width: 100%; display: block;"
-                               class="border border-black p-2 text-base rounded-none focus:outline-none focus:ring-1 focus:ring-black">
-                        @error('Straatnaam')
-                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
+                            <tr>
+                                <td class="w-48 align-middle text-base font-normal pr-4">
+                                    <label for="Straatnaam">Straatnaam:</label>
+                                </td>
+                                <td>
+                                    <input type="text" 
+                                           name="Straatnaam" 
+                                           id="Straatnaam" 
+                                           value="{{ old('Straatnaam', $leverancier->Straatnaam) }}" 
+                                           required 
+                                           class="w-full border border-black p-2 text-base rounded-none focus:outline-none focus:ring-1 focus:ring-black">
+                                    @error('Straatnaam')
+                                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </td>
+                            </tr>
 
-                    <div>
-                        <label for="Huisnummer" class="block text-base mb-1">Huisnummer:</label>
-                        <input type="text" 
-                               name="Huisnummer" 
-                               id="Huisnummer" 
-                               value="{{ old('Huisnummer', $leverancier->Huisnummer) }}" 
-                               required 
-                               style="width: 280px; max-width: 100%; display: block;"
-                               class="border border-black p-2 text-base rounded-none focus:outline-none focus:ring-1 focus:ring-black">
-                        @error('Huisnummer')
-                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
+                            <tr>
+                                <td class="w-48 align-middle text-base font-normal pr-4">
+                                    <label for="Huisnummer">Huisnummer:</label>
+                                </td>
+                                <td>
+                                    <input type="text" 
+                                           name="Huisnummer" 
+                                           id="Huisnummer" 
+                                           value="{{ old('Huisnummer', $leverancier->Huisnummer) }}" 
+                                           required 
+                                           class="w-full border border-black p-2 text-base rounded-none focus:outline-none focus:ring-1 focus:ring-black">
+                                    @error('Huisnummer')
+                                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </td>
+                            </tr>
 
-                    <div>
-                        <label for="Postcode" class="block text-base mb-1">Postcode:</label>
-                        <input type="text" 
-                               name="Postcode" 
-                               id="Postcode" 
-                               value="{{ old('Postcode', $leverancier->Postcode) }}" 
-                               required 
-                               style="width: 280px; max-width: 100%; display: block;"
-                               class="border border-black p-2 text-base rounded-none focus:outline-none focus:ring-1 focus:ring-black">
-                        @error('Postcode')
-                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
+                            <tr>
+                                <td class="w-48 align-middle text-base font-normal pr-4">
+                                    <label for="Postcode">Postcode:</label>
+                                </td>
+                                <td>
+                                    <input type="text" 
+                                           name="Postcode" 
+                                           id="Postcode" 
+                                           value="{{ old('Postcode', $leverancier->Postcode) }}" 
+                                           required 
+                                           class="w-full border border-black p-2 text-base rounded-none focus:outline-none focus:ring-1 focus:ring-black">
+                                    @error('Postcode')
+                                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </td>
+                            </tr>
 
-                    <div>
-                        <label for="Stad" class="block text-base mb-1">Stad:</label>
-                        <input type="text" 
-                               name="Stad" 
-                               id="Stad" 
-                               value="{{ old('Stad', $leverancier->Stad) }}" 
-                               required 
-                               style="width: 280px; max-width: 100%; display: block;"
-                               class="border border-black p-2 text-base rounded-none focus:outline-none focus:ring-1 focus:ring-black">
-                        @error('Stad')
-                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
+                            <tr>
+                                <td class="w-48 align-middle text-base font-normal pr-4">
+                                    <label for="Stad">Stad:</label>
+                                </td>
+                                <td>
+                                    <input type="text" 
+                                           name="Stad" 
+                                           id="Stad" 
+                                           value="{{ old('Stad', $leverancier->Stad) }}" 
+                                           required 
+                                           class="w-full border border-black p-2 text-base rounded-none focus:outline-none focus:ring-1 focus:ring-black">
+                                    @error('Stad')
+                                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
 
                     {{-- Knoppenbalk: Sla Op links, terug en home rechts --}}
-                    <div class="pt-4 flex flex-row justify-between items-center" style="margin-top: 24px;">
+                    <div class="mt-6 flex flex-row justify-between items-center">
                         <div>
                             <button type="submit" 
                                     class="px-6 py-2 border border-black bg-white hover:bg-gray-100 text-black font-normal text-sm">
@@ -161,11 +189,11 @@
                         </div>
                         <div class="flex flex-row gap-3 items-center">
                             <a href="{{ route('leverancier.details', $leverancier->LeverancierId) }}" 
-                               class="px-6 py-2 border border-black bg-white hover:bg-gray-100 text-black font-normal text-sm">
+                               class="px-6 py-2 border border-black bg-white hover:bg-gray-100 text-black font-normal text-sm inline-block">
                                 terug
                             </a>
                             <a href="{{ route('dashboard') }}" 
-                               class="px-6 py-2 border border-black bg-white hover:bg-gray-100 text-black font-normal text-sm">
+                               class="px-6 py-2 border border-black bg-white hover:bg-gray-100 text-black font-normal text-sm inline-block">
                                 home
                             </a>
                         </div>
