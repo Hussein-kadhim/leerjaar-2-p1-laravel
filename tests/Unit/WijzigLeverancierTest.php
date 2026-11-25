@@ -3,6 +3,9 @@
 use App\Models\Leverancier;
 use App\Models\Contact;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Tests\TestCase;
+
+uses(TestCase::class);
 
 test('Unit Test 1: leverancier model heeft een belongsTo relatie met contact', function () {
     $leverancier = new Leverancier();
