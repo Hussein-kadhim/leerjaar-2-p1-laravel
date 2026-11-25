@@ -23,12 +23,6 @@
                             Wijzigen Leveranciers
                         </a>
                     </div>
-
-                    <div class="mt-6 pt-4 border-t border-gray-200">
-                        <a href="{{ route('leverancier.wijzigen') }}" class="text-blue-600 hover:text-blue-800 text-lg font-medium">
-                            <u>Wijzigen Leveranciers</u>
-                        </a>
-                    </div>
                 </div>
             </div>
         </div>
