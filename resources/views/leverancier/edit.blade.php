@@ -7,9 +7,9 @@
                     <u>Wijzig Leveranciergegevens</u>
                 </h1>
 
-                {{-- Scenario 01: Succesmelding --}}
+                {{-- Scenario 01: Succesmelding (Groene achtergrond) --}}
                 @if (session('success_melding'))
-                    <div class="mb-6 p-4 border border-green-500 bg-green-50 text-green-700 text-lg rounded">
+                    <div class="mb-6 p-4 rounded text-lg font-medium" style="background-color: #dcfce7; color: #15803d; border: 2px solid #22c55e;">
                         {{ session('success_melding') }}
                     </div>
 
@@ -21,9 +21,9 @@
                     </script>
                 @endif
 
-                {{-- Scenario 02: Foutmelding bij technische storing --}}
+                {{-- Scenario 02: Foutmelding bij technische storing (Rode achtergrond) --}}
                 @if (session('error_melding'))
-                    <div class="mb-6 p-4 border border-red-500 bg-red-50 text-red-700 text-lg rounded">
+                    <div class="mb-6 p-4 rounded text-lg font-medium" style="background-color: #fee2e2; color: #991b1b; border: 2px solid #ef4444;">
                         {{ session('error_melding') }}
                     </div>
 
